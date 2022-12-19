@@ -14,6 +14,9 @@ jobs:
         with:
           python-version: '3.9'
       - name: Install all necessary packages
-        run: pip install selenium
-      - name: Run the scraping script
-        run: python scrape.py
+        run: pip install selenium webdriver-manager
+      - name: Run the book study room script
+        env: 
+          CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
+          CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
+        run: python Github_Driver.py
