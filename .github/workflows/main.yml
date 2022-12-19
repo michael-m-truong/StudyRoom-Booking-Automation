@@ -13,8 +13,16 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: '3.9'
+      - name: Installed package list
+        run: apt list --installed
+      - name: Remove Chrome
+        run: sudo apt purge google-chrome-stable
+      - name: Remove default Chromium
+        run: sudo apt purge chromium-browser
+      - name: Install a new Chromium
+        run: sudo apt install -y chromium-browser
       - name: Install all necessary packages
-        run: pip install selenium webdriver-manager packaging
+        run: pip install selenium webdriver-manager
       - name: Run the book study room script
         env: 
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
