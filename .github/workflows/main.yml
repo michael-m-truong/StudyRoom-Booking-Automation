@@ -2,9 +2,10 @@ name: book_room
 on:
   workflow_dispatch:
   schedule:
-    - cron: '25 0 * * *'
+    - cron: '30 8 * * *'
 jobs:
   book:
+    name: main
     runs-on: ubuntu-latest
     steps:
       - name: Check out this repo
