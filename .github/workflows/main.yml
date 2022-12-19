@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '0 8 * * *'
 jobs:
-  scrape:
+  book:
     runs-on: ubuntu-latest
     steps:
       - name: Check out this repo
