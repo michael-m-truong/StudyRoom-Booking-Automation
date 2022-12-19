@@ -47,7 +47,7 @@ def main():
 def selectRoom():
     print(driver.title)
     time.sleep(1)
-    roomSelection = driver.find_element(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[11]/td/div/div[2]/div[4]/a/div/div/div")
+    roomSelection = driver.find_element(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[20]/td/div/div[2]/div[4]/a/div/div/div")
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[29]/td/div/div[2]/div[7]/a/div/div/div
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[33]/td/div/div[2]/div[5]/a
     driver.execute_script("arguments[0].scrollIntoView();", roomSelection)
