@@ -2,7 +2,7 @@ name: book_room
 on:
   #workflow_dispatch:
   schedule:
-    - cron: '40 8 * * *'
+    - cron: '2 7 * * *'
 jobs:
   book:
     name: main
