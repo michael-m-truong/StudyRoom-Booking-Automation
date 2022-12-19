@@ -1,8 +1,8 @@
 name: book_room
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '22 8 * * *'
-  #workflow_dispatch:
+    - cron: '25 0 * * *'
 jobs:
   book:
     runs-on: ubuntu-latest
