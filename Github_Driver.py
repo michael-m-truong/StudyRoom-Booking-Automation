@@ -49,7 +49,6 @@ def main():
     findOptimalRoom(getAvailableRooms())
     optimalRoom = optimalRooms.get()[6]
     selectRoom(optimalRoom)
-    selectRoom()
     login()
     duo2Factor()
     confirm()
@@ -59,13 +58,13 @@ def getAvailableRooms():
     #table = driver.find_element(by=By.XPATH, value="")
     time.sleep(2)
     allRooms = driver.find_elements(by=By.CLASS_NAME, value='fc-timeline-event')
-    print(len(allRooms))
+    #print(len(allRooms))
     avalibleRooms = list(filter(removeUnvailableRoom, allRooms))
     # for room in amt:
     #     date = room.get_attribute('title')
     #     if len(date) != 0:
     #         green.append(room)
-    print(len(avalibleRooms))
+    #print(len(avalibleRooms))
     # for room in avalibleRooms:
     #     date = room.get_attribute('title')
     #     print(date)
@@ -174,7 +173,7 @@ def removeUnvailableRoom(room):
     return True
 
 def selectRoom(optimalRoom):
-    print(driver.title)
+    #print(driver.title)
     time.sleep(1)
     #roomSelection = driver.find_element(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[14]/td/div/div[2]/div[13]/a")
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[29]/td/div/div[2]/div[7]/a/div/div/div
@@ -216,10 +215,10 @@ def confirm():
             EC.presence_of_element_located((By.XPATH, "//*[@id='s-lc-eq-bform-submit']"))
         )
         confirmButton.click()
-        print("clicked")
+        #print("clicked")
     except:
         driver.quit()
-    print("done")
+    #print("done")
 
 if __name__ == "__main__":
     main()
