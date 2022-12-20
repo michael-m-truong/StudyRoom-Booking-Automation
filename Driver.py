@@ -2,6 +2,8 @@ import time
 import os 
 import re
 
+import RoomCapacities
+
 from queue import PriorityQueue
 #import datetime
 from datetime import datetime, timedelta
@@ -37,6 +39,7 @@ FAVORITE_TIMES_MW = ["10:00am", "10:30am"]
 FAVORITE_TIMES_TTH = ["2:30pm", "3:00pm"]
 FAVORITE_ROOMS = ["4134", "4823", "4136", "6919A"]
 FAVORITE_DATES = [days[0], days[1], days[2], days[3], days[4]]   #day[0] is tomorrow, day[1] 1 day after tom, etc.
+MINIMUM_TIME_ALLOTED = 4   # 4 30 min sessions, so 2 hrs
 
 optimalRooms = PriorityQueue()
 # (date, time, room)
@@ -46,6 +49,14 @@ def main():
     driver.maximize_window()
     driver.get('https://cpp.libcal.com/reserve/study-rooms')
     findOptimalRoom(getAvailableRooms())
+    print(optimalRooms.get()[6].get_attribute('title'))
+    print(optimalRooms.get()[6].get_attribute('title'))
+    print(optimalRooms.get()[6].get_attribute('title'))
+    print(optimalRooms.get()[6].get_attribute('title'))
+    print(optimalRooms.get()[6].get_attribute('title'))
+    print(optimalRooms.get()[6].get_attribute('title'))
+    print(optimalRooms.get()[6].get_attribute('title'))
+    print(optimalRooms.get()[6].get_attribute('title'))
     #selectRoom()
     #login()
     #duo2Factor()
@@ -85,6 +96,7 @@ def findOptimalRoom(rooms):
         availableRooms.add(roomInfo)
         print(roomInfo)
 
+    roomCount = 0
     for room in rooms:
         roomInfo = room.get_attribute('title')
         # Find the index of the "am" or "pm" substring
@@ -93,33 +105,36 @@ def findOptimalRoom(rooms):
         # Slice the string starting from the index of the "am" or "pm" substring
         roomTime = roomInfo[:index+2]
         indexes = [index for index, char in enumerate(roomInfo) if char == '-']
-        roomNumber = roomInfo[indexes[0]+1:indexes[1]-1]
+        roomNumber = roomInfo[indexes[0]+1:indexes[1]-1].strip()
         date_part = roomInfo.split("-")[0]
         date_part = date_part[date_part.index(',')+2:len(date_part)-1]
         roomDate = date_part
         roomDateAndNumber = roomInfo[index+3:]
         #print(currentTime)
 
-        print(roomTime)
+        #print(roomTime)
         intervalsOf30Min = 1
         for i in range(5):
             time = datetime.strptime(roomTime, "%I:%M%p")
 
             time += timedelta(minutes=30)
-            roomTime = time.strftime("%I:%M%p")
-            roomTime = roomTime.lower()
-            if roomTime[0] == "0":
-                roomTime = roomTime[1:]
-            roomData = ''.join([roomTime, " ", roomDateAndNumber])
-            print("this is room data:" + roomData + "L")
+            roomEndTime = time.strftime("%I:%M%p")
+            roomEndTime = roomEndTime.lower()
+            if roomEndTime[0] == "0":
+                roomEndTime = roomEndTime[1:]
+            roomData = ''.join([roomEndTime, " ", roomDateAndNumber])
+            #print("this is room data:" + roomData + "L")
             if roomData in availableRooms:
                 intervalsOf30Min+=1
             else:
                 break
-        print("intervalsOf30Min: " + str(intervalsOf30Min))
+        #print("intervalsOf30Min: " + str(intervalsOf30Min))
         roomScore = 0
         timeScore = 0
         dateScore = 0
+        allotedTimeScore = 0
+        capacityScore = 0
+        print(roomNumber)
         if currentDayOfWeek == "Monday" or currentDayOfWeek == "Wednesday":
             if roomTime not in FAVORITE_TIMES_MW:
                 timeScore = len(FAVORITE_TIMES_MW)
@@ -134,8 +149,32 @@ def findOptimalRoom(rooms):
         if roomDate not in FAVORITE_DATES:
             dateScore = len(FAVORITE_DATES)
         else:
-            dateScore = 0
-        optimalRooms.put(())
+            dateScore = FAVORITE_DATES.index(roomDate)
+        if roomNumber not in FAVORITE_ROOMS:
+            favoriteFloorValue = 0
+            if roomNumber[0] == "2":
+                favoriteFloorValue = 4 # worst floor
+            elif roomNumber[0] == "3":
+                favoriteFloorValue = 1
+            elif roomNumber[0] == "4":
+                favoriteFloorValue = 0  #best floor
+            elif roomNumber[0] == "5":
+                favoriteFloorValue = 3
+            elif roomNumber[0] == "6":
+                favoriteFloorValue = 2
+            roomScore = len(FAVORITE_ROOMS)+favoriteFloorValue
+        else:
+            roomScore = FAVORITE_ROOMS.index(roomNumber)
+        if intervalsOf30Min >= 4:
+            allotedTimeScore = -6    
+        else:
+            allotedTimeScore = intervalsOf30Min*-1
+        
+        capacityScore = RoomCapacities.RoomCapacities[roomNumber]
+        capacityScore*=-1
+
+        optimalRooms.put((dateScore, timeScore , allotedTimeScore, roomScore, capacityScore, roomCount, room))
+        roomCount+=1
         print(roomDate)
 
 
