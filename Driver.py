@@ -1,11 +1,10 @@
 import time
 import os 
-import re
 
 import RoomCapacities
+from RoomSettings import intializeRoomSettings, FAVORITE_TIMES_MW, FAVORITE_TIMES_TTH, FAVORITE_DATES, FAVORITE_ROOMS
 
 from queue import PriorityQueue
-#import datetime
 from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
@@ -21,26 +20,10 @@ load_dotenv()
 options = webdriver.ChromeOptions()
 #options.add_experimental_option('excludeSwitches', ['enable-logging'])  
 x=Service('C:\Program Files (x86)\chromedriver.exe')
-options.headless = True
+# options.headless = True
 driver = webdriver.Chrome(service=x, options=options)
 
-def getDaysOfWeek():
-    days = []
-    for i in range(1,14):
-        now = datetime.now()
-        next_day = now + timedelta(days=i)
-        currentDate = next_day.strftime("%B %d, %Y")
-        days.append(currentDate)
-    return days   
-
-days = getDaysOfWeek()
-print(days)
-FAVORITE_TIMES_MW = ["10:00am", "10:30am"]
-FAVORITE_TIMES_TTH = ["2:30pm", "3:00pm"]
-FAVORITE_ROOMS = ["4134", "4823", "4136", "6919A"]
-FAVORITE_DATES = [days[0], days[1], days[2], days[3], days[4]]   #day[0] is tomorrow, day[1] 1 day after tom, etc.
-MINIMUM_TIME_ALLOTED = 4   # 4 30 min sessions, so 2 hrs
-
+intializeRoomSettings()
 optimalRooms = PriorityQueue()
 # (date, time, room)
 
@@ -48,17 +31,20 @@ optimalRooms = PriorityQueue()
 def main():
     driver.maximize_window()
     driver.get('https://cpp.libcal.com/reserve/study-rooms')
+    print("hi")
     findOptimalRoom(getAvailableRooms())
-    print(optimalRooms.get()[6].get_attribute('title'))
-    print(optimalRooms.get()[6].get_attribute('title'))
-    print(optimalRooms.get()[6].get_attribute('title'))
-    print(optimalRooms.get()[6].get_attribute('title'))
-    print(optimalRooms.get()[6].get_attribute('title'))
-    print(optimalRooms.get()[6].get_attribute('title'))
-    print(optimalRooms.get()[6].get_attribute('title'))
-    print(optimalRooms.get()[6].get_attribute('title'))
-    #selectRoom()
-    #login()
+    # print(optimalRooms.get()[6].get_attribute('title'))
+    # print(optimalRooms.get()[6].get_attribute('title'))
+    # print(optimalRooms.get()[6].get_attribute('title'))
+    # print(optimalRooms.get()[6].get_attribute('title'))
+    # print(optimalRooms.get()[6].get_attribute('title'))
+    # print(optimalRooms.get()[6].get_attribute('title'))
+    # print(optimalRooms.get()[6].get_attribute('title'))
+    # print(optimalRooms.get()[6].get_attribute('title'))
+    optimalRoom = optimalRooms.get()[6]
+    print(optimalRoom.get_attribute('title'))
+    selectRoom(optimalRoom)
+    login()
     #duo2Factor()
     #confirm()
     #driver.close()
@@ -66,6 +52,7 @@ def main():
 
 def getAvailableRooms():
     #table = driver.find_element(by=By.XPATH, value="")
+    print("hi")
     time.sleep(2)
     allRooms = driver.find_elements(by=By.CLASS_NAME, value='fc-timeline-event')
     print(len(allRooms))
@@ -81,6 +68,7 @@ def getAvailableRooms():
     return avalibleRooms
 
 def findOptimalRoom(rooms):
+    print("hi")
     rooms = set(rooms)
 
     now = datetime.now()
@@ -198,22 +186,21 @@ def findOptimalRoom(rooms):
 
 def removeUnvailableRoom(room):
     date = room.get_attribute('title')
-    #print("hi")
     if len(date) == 0:
         return False
     if "Unavailable" in date:
         return False
     return True
 
-def selectRoom():
+def selectRoom(optimalRoom):
     print(driver.title)
     time.sleep(1)
-    roomSelection = driver.find_element(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[14]/td/div/div[2]/div[4]/a/div/div/div")
+    roomSelection = driver.find_element(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[14]/td/div/div[2]/div[13]/a")
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[29]/td/div/div[2]/div[7]/a/div/div/div
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[33]/td/div/div[2]/div[5]/a
-    driver.execute_script("arguments[0].scrollIntoView();", roomSelection)
-    roomSelection.click()
-    print("test")
+    print(roomSelection)
+    driver.execute_script("arguments[0].scrollIntoView();", optimalRoom)
+    optimalRoom.click()
     time.sleep(1)
     # driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
     submitTime = driver.find_element(by=By.XPATH, value="//*[@id='submit_times']")
