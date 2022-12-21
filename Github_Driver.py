@@ -49,6 +49,7 @@ def main():
     driver.get('https://cpp.libcal.com/reserve/study-rooms')
     findOptimalRoom(getAvailableRooms())
     optimalRoom = optimalRooms.get()[6]
+    print(optimalRoom.get_attribute('title'))
     selectRoom(optimalRoom)
     login()
     duo2Factor()
