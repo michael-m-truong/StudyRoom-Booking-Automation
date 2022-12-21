@@ -2,7 +2,7 @@ name: book_room
 on:
   workflow_dispatch:
   schedule:
-    - cron: '35 7 * * *'
+    - cron: '55 6 * * *'
 jobs:
   book:
     name: main
@@ -11,7 +11,7 @@ jobs:
       - name: Check out this repo
         uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
       - name: Installed package list
@@ -23,7 +23,7 @@ jobs:
       - name: Install a new Chromium
         run: sudo apt install -y chromium-browser
       - name: Install all necessary packages
-        run: pip install selenium webdriver-manager
+        run: pip install selenium webdriver-manager pytz
       - name: Run the book study room script
         env: 
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}

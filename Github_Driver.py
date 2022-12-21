@@ -21,6 +21,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.utils import ChromeType
 from selenium.webdriver.chrome.options import Options
 
+import pytz
 
 load_dotenv()
 chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
@@ -74,7 +75,8 @@ def findOptimalRoom(rooms):
     rooms = set(rooms)
 
     now = datetime.now()
-
+    pst_timezone = pytz.timezone('US/Pacific')
+    now = now.astimezone(pst_timezone)
     next_day = now + timedelta(days=1)
     currentDate = next_day.strftime("%B %d, %Y")
     currentDayOfWeek = next_day.strftime("%A")
