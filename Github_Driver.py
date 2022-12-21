@@ -187,7 +187,7 @@ def selectRoom(optimalRoom):
     # driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
     submitTime = driver.find_element(by=By.XPATH, value="//*[@id='submit_times']")
     driver.execute_script("arguments[0].scrollIntoView();", submitTime)
-
+    time.sleep(1)
     submitTime.click()
     time.sleep(1)
 
