@@ -3,8 +3,10 @@ import os
 
 import RoomCapacities
 from RoomSettings import intializeRoomSettings, FAVORITE_TIMES_MW, FAVORITE_TIMES_TTH, FAVORITE_DATES, FAVORITE_ROOMS
-
+from MaxSizePriorityQueue import MaxSizePriorityQueue
 from queue import PriorityQueue
+
+
 from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
@@ -16,77 +18,182 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+import pytz
+
 load_dotenv()
 options = webdriver.ChromeOptions()
 #options.add_experimental_option('excludeSwitches', ['enable-logging'])  
 x=Service('C:\Program Files (x86)\chromedriver.exe')
-# options.headless = True
+#options.headless = True
 driver = webdriver.Chrome(service=x, options=options)
 
-intializeRoomSettings()
 optimalRooms = PriorityQueue()
 # (date, time, room)
 
 
 def main():
     driver.maximize_window()
-    driver.get('https://cpp.libcal.com/reserve/study-rooms')
+    #driver.get('https://cpp.libcal.com/reserve/study-rooms')
     print("hi")
-    findOptimalRoom(getAvailableRooms())
+    # Add some elements to the queue
+    #print(optimalRooms.empty())
+    #table()
+    bookForWeek(optimalRooms)
+    #findOptimalRoom(getAvailableRooms())
     # print(optimalRooms.get()[6].get_attribute('title'))
-    # print(optimalRooms.get()[6].get_attribute('title'))
-    # print(optimalRooms.get()[6].get_attribute('title'))
-    # print(optimalRooms.get()[6].get_attribute('title'))
-    # print(optimalRooms.get()[6].get_attribute('title'))
-    # print(optimalRooms.get()[6].get_attribute('title'))
-    # print(optimalRooms.get()[6].get_attribute('title'))
-    # print(optimalRooms.get()[6].get_attribute('title'))
-    optimalRoom = optimalRooms.get()[6]
-    print(optimalRoom.get_attribute('title'))
-    selectRoom(optimalRoom)
-    login()
+    #optimalRoom = optimalRooms.get()[6]
+    #print(optimalRoom.get_attribute('title'))
+    #selectRoom(optimalRoom)
+    #login()
     #duo2Factor()
     #confirm()
     #driver.close()
 
+def bookForWeek(optimalRooms):
+    newBookings = []
+    for i in range(0, len(FAVORITE_DATES)):
+        print("runningg")
+        clickedNextPage = False
+        dateMDY = FAVORITE_DATES[i] #(FAVORITE_DATES[i].split(',')[1] + FAVORITE_DATES[i].split(',')[1])[1:]
+        dayOfWeek = datetime.strptime(dateMDY, "%B %d, %Y")
+        dayOfWeek = dayOfWeek.strftime("%A")
+        print(dateMDY)
+        print(dayOfWeek)
+        with open("RoomBookings.txt", "r") as f:
+            lines = f.readlines()
+        if FAVORITE_DATES[i] in lines:
+            continue
+        else:
+            driver.get('https://cpp.libcal.com/reserve/study-rooms')
+            datesOnPage = getDatesInTable()
+            print(datesOnPage)
+            #print(FAVORITE_DATES[i])
+            if (dayOfWeek + ", " + dateMDY) not in datesOnPage:
+                print("not in table")
+                clickedNextPage = True
+                while (dayOfWeek + ", "+ dateMDY) not in datesOnPage:
+                    print("testtt")
+                    if not nextPage():
+                        break
+                    datesOnPage = getDatesInTable()
+                    print(dateMDY)
+                    print(datesOnPage)
+            #FAVORITE_DATES.pop(0)
+            #book room logic here
+            optimalRooms = PriorityQueue()
+            availableRooms = getAvailableRooms(dayOfWeek)
+            if len(availableRooms) == 0:
+                print("NO ROOMS!!!!!!!!!!!!")
+                continue
+            findOptimalRoom(optimalRooms, availableRooms)
+            print("hereeeeeeeeeeeeeeeeeeeee")
+            print(optimalRooms.empty())
+            optimalRoom = optimalRooms.get()[6]
+            print(optimalRoom.get_attribute('title'))
+            #print(optimalRoom.get_attribute('title'))
+            print("22222222222222222222")
+            optimalRoom = optimalRooms.get()[6]
+            print(optimalRoom.get_attribute('title'))
+            selectRoom(optimalRoom)
+            login()
+            duo2Factor()
+            confirm()
 
-def getAvailableRooms():
+            
+            # while (room[0] == i)and not optimalRooms.empty():
+            #     room = optimalRooms.get()
+                #print(room[6].get_attribute('title'))
+            #optimalRooms.put(room)
+            print(optimalRooms.empty())
+            #print(optimalRooms.get()[6].get_attribute('title'))
+            # print(optimalRooms.get()[6].get_attribute('title'))
+            # print(optimalRooms.get()[6].get_attribute('title'))
+            # print(optimalRooms.get()[6].get_attribute('title'))
+
+    saveToFile(newBookings)
+
+def nextPage():
+    nextButton = driver.find_element(by=By.XPATH, value="//*[@id='eq-time-grid']/div[1]/div[1]/div/button[2]")
+    if not nextButton.is_enabled():
+        return False
+    nextButton.click()
+    time.sleep(1)
+    return True
+
+def saveToFile(newBookings):
+    with open("RoomBookings.txt", "r") as f:
+        lines = f.readlines()
+    
+    if len(lines) != 0:
+        lines.pop(0)
+
+    with open('RoomBookings.txt', 'w') as f:
+        f.writelines(lines)
+
+    with open("RoomBookings.txt", "a") as f:
+        #newBookings = ["hi", "michael", "i like", "piiza"]
+        for i in range(len(newBookings)):
+            newBookings[i] = newBookings[i] + "\n"
+        f.writelines(newBookings)
+
+def getDatesInTable():
+    time.sleep(2)
+    tableDates = driver.find_elements(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/thead/tr/td[3]/div/div/div/table/tbody/tr[1]/th/div/span")
+    print(tableDates[0].text)
+    print(tableDates[1].text)
+    print(tableDates[2].text)
+    return [tableDates[0].text, tableDates[1].text, tableDates[2].text]
+    print(FAVORITE_DATES[2])
+    print(FAVORITE_DATES[3])
+    #print(len(tableDates))
+    #print(tableDates[0].text)
+
+def getAvailableRooms(dayOfWeek):
     #table = driver.find_element(by=By.XPATH, value="")
-    print("hi")
+    print("hiiiiiiiiiiiii")
+    print(dayOfWeek)
     time.sleep(2)
     allRooms = driver.find_elements(by=By.CLASS_NAME, value='fc-timeline-event')
     print(len(allRooms))
     avalibleRooms = list(filter(removeUnvailableRoom, allRooms))
+    avalibleRooms_same_day = list()
+    for room in avalibleRooms:
+        if dayOfWeek in room.get_attribute('title'):
+            avalibleRooms_same_day.append(room)
     # for room in amt:
     #     date = room.get_attribute('title')
     #     if len(date) != 0:
     #         green.append(room)
     print(len(avalibleRooms))
+    print(len(avalibleRooms_same_day))
     # for room in avalibleRooms:
     #     date = room.get_attribute('title')
     #     print(date)
-    return avalibleRooms
+    return avalibleRooms_same_day
 
-def findOptimalRoom(rooms):
+def findOptimalRoom(optimalRooms, rooms):
     print("hi")
     rooms = set(rooms)
 
     now = datetime.now()
-
+    pst_timezone = pytz.timezone('US/Pacific')
+    now = now.astimezone(pst_timezone)
     next_day = now + timedelta(days=1)
     currentDate = next_day.strftime("%B %d, %Y")
     currentDayOfWeek = next_day.strftime("%A")
-    print(currentDayOfWeek)
+    #print(currentDayOfWeek)
     
     availableRooms = set()
     for room in rooms: 
         roomInfo = room.get_attribute('title')
         availableRooms.add(roomInfo)
-        print(roomInfo)
+        #print(roomInfo)
 
     roomCount = 0
     for room in rooms:
+        #11:30am Wednesday, December 21, 2022 - 5929 - Available
         roomInfo = room.get_attribute('title')
+        #print(roomInfo)
         # Find the index of the "am" or "pm" substring
         index = roomInfo.index("am") if "am" in roomInfo else roomInfo.index("pm")
 
@@ -98,6 +205,8 @@ def findOptimalRoom(rooms):
         date_part = date_part[date_part.index(',')+2:len(date_part)-1]
         roomDate = date_part
         roomDateAndNumber = roomInfo[index+3:]
+        roomDayOfWeek = roomInfo.split(',')[0].split(" ")[1]
+        roomDayOfWeek = roomDayOfWeek.strip()
         #print(currentTime)
 
         #print(roomTime)
@@ -122,13 +231,13 @@ def findOptimalRoom(rooms):
         dateScore = 0
         allotedTimeScore = 0
         capacityScore = 0
-        print(roomNumber)
-        if currentDayOfWeek == "Monday" or currentDayOfWeek == "Wednesday":
+        #print(roomNumber)
+        if roomDayOfWeek == "Monday" or roomDayOfWeek == "Wednesday":
             if roomTime not in FAVORITE_TIMES_MW:
                 timeScore = len(FAVORITE_TIMES_MW)
             else:
                 timeScore = FAVORITE_TIMES_MW.index(roomTime)
-        elif currentDayOfWeek == "Tuesday" or currentDayOfWeek == "Thursday":
+        elif roomDayOfWeek == "Tuesday" or roomDayOfWeek == "Thursday":
             if roomTime not in FAVORITE_TIMES_TTH:
                 timeScore = len(FAVORITE_TIMES_TTH)
             else:
@@ -162,8 +271,9 @@ def findOptimalRoom(rooms):
         capacityScore*=-1
 
         optimalRooms.put((dateScore, timeScore , allotedTimeScore, roomScore, capacityScore, roomCount, room))
+        #print(optimalRooms.empty())
         roomCount+=1
-        print(roomDate)
+        #print(roomDate)
 
 
     print()
@@ -173,7 +283,7 @@ def findOptimalRoom(rooms):
     next_day = now + timedelta(days=1)
 
     # Print the next day's date in the format "Month Day, Year"
-    print(next_day.strftime("%B %d, %Y"))
+    #print(next_day.strftime("%B %d, %Y"))
 
     time = datetime.strptime("10:30am", "%I:%M%p")
 
@@ -181,7 +291,7 @@ def findOptimalRoom(rooms):
     time += timedelta(minutes=30)
 
     # New time: 11:00am
-    print(time.strftime("%I:%M%p"))
+    #print(time.strftime("%I:%M%p"))
 
 
 def removeUnvailableRoom(room):
@@ -194,11 +304,13 @@ def removeUnvailableRoom(room):
 
 def selectRoom(optimalRoom):
     print(driver.title)
+    print("selecting room!")
     time.sleep(1)
     roomSelection = driver.find_element(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[14]/td/div/div[2]/div[13]/a")
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[29]/td/div/div[2]/div[7]/a/div/div/div
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[33]/td/div/div[2]/div[5]/a
-    print(roomSelection)
+    print(optimalRoom.get_attribute('title'))
+    print("----------------------------------------------")
     driver.execute_script("arguments[0].scrollIntoView();", optimalRoom)
     optimalRoom.click()
     time.sleep(1)
@@ -245,3 +357,4 @@ def confirm():
 
 if __name__ == "__main__":
     main()
+    #test()
