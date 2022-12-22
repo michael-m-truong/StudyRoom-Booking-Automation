@@ -53,6 +53,7 @@ def bookForWeek(optimalRooms):
     newBookings = []
     for i in range(0, len(FAVORITE_DATES)):
         print("runningg")
+        otherBookingChoices = []
         clickedNextPage = False
         dateMDY = FAVORITE_DATES[i] #(FAVORITE_DATES[i].split(',')[1] + FAVORITE_DATES[i].split(',')[1])[1:]
         dayOfWeek = datetime.strptime(dateMDY, "%B %d, %Y")
@@ -89,17 +90,23 @@ def bookForWeek(optimalRooms):
             print("hereeeeeeeeeeeeeeeeeeeee")
             print(optimalRooms.empty())
             optimalRoom = optimalRooms.get()[6]
-            print(optimalRoom.get_attribute('title'))
+            optimalRoomData = optimalRoom.get_attribute('title')
+            print(optimalRoomData)
             #print(optimalRoom.get_attribute('title'))
             print("22222222222222222222")
-            optimalRoom = optimalRooms.get()[6]
-            print(optimalRoom.get_attribute('title'))
+            while not optimalRooms.empty():
+                otherBookingChoices.append(optimalRooms.get()[6].get_attribute('title') + "\n")
+            otherBookingChoices.append("\n")
+            # optimalRoom = optimalRooms.get()[6]
+            # print(optimalRoom.get_attribute('title'))
             selectRoom(optimalRoom)
             login()
             duo2Factor()
             confirm()
 
-            
+            newBookings.append((optimalRoomData+"\n"))
+            with open("OtherBookingChoices.txt", "a") as f:
+                f.writelines(otherBookingChoices)
             # while (room[0] == i)and not optimalRooms.empty():
             #     room = optimalRooms.get()
                 #print(room[6].get_attribute('title'))
@@ -211,8 +218,9 @@ def findOptimalRoom(optimalRooms, rooms):
 
         #print(roomTime)
         intervalsOf30Min = 1
+        time = datetime.strptime(roomTime, "%I:%M%p")
         for i in range(5):
-            time = datetime.strptime(roomTime, "%I:%M%p")
+            #time = datetime.strptime(roomTime, "%I:%M%p")
 
             time += timedelta(minutes=30)
             roomEndTime = time.strftime("%I:%M%p")
@@ -221,6 +229,8 @@ def findOptimalRoom(optimalRooms, rooms):
                 roomEndTime = roomEndTime[1:]
             roomData = ''.join([roomEndTime, " ", roomDateAndNumber])
             #print("this is room data:" + roomData + "L")
+            print(roomData)
+            #print(availableRooms)
             if roomData in availableRooms:
                 intervalsOf30Min+=1
             else:
