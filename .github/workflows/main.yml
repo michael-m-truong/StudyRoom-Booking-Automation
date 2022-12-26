@@ -29,3 +29,8 @@ jobs:
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
           CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
         run: python Github_Driver.py
+      - name: Commit change to RoomBookings.txt log file
+        run: |
+          git add .
+          git commit -m "Updated RoomBookings.txt"
+          git push
