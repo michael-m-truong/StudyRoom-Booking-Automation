@@ -51,6 +51,9 @@ def main():
 
 def bookForWeek(optimalRooms):
     newBookings = []
+    open("OtherBookingChoices.txt", "w").close()
+    with open("RoomBookings.txt", "r") as f:
+            lines = f.readlines()
     for i in range(0, len(FAVORITE_DATES)):
         print("runningg")
         otherBookingChoices = []
@@ -60,9 +63,8 @@ def bookForWeek(optimalRooms):
         dayOfWeek = dayOfWeek.strftime("%A")
         print(dateMDY)
         print(dayOfWeek)
-        with open("RoomBookings.txt", "r") as f:
-            lines = f.readlines()
-        if FAVORITE_DATES[i] in lines:
+        if any(FAVORITE_DATES[i] in line for line in lines):
+            print("ALREADY BOOKED!!!!!!!!!")
             continue
         else:
             driver.get('https://cpp.libcal.com/reserve/study-rooms')
@@ -89,22 +91,29 @@ def bookForWeek(optimalRooms):
             findOptimalRoom(optimalRooms, availableRooms)
             print("hereeeeeeeeeeeeeeeeeeeee")
             print(optimalRooms.empty())
-            optimalRoom = optimalRooms.get()[6]
-            optimalRoomData = optimalRoom.get_attribute('title')
+            optimalRoom = optimalRooms.get()
+            optimalRoomData = optimalRoom[6].get_attribute('title')
             print(optimalRoomData)
             #print(optimalRoom.get_attribute('title'))
             print("22222222222222222222")
             while not optimalRooms.empty():
-                otherBookingChoices.append(optimalRooms.get()[6].get_attribute('title') + "\n")
+                room = optimalRooms.get()
+                roomEndTime = (room[7].strftime("%I:%M%p")).lower()
+                if roomEndTime[0] == "0":
+                    roomEndTime = roomEndTime[1:]
+                otherBookingChoices.append(room[6].get_attribute('title') + " till " + roomEndTime + "\n")
             otherBookingChoices.append("\n")
             # optimalRoom = optimalRooms.get()[6]
             # print(optimalRoom.get_attribute('title'))
-            selectRoom(optimalRoom)
+            selectRoom(optimalRoom[6])
             login()
             duo2Factor()
             confirm()
 
-            newBookings.append((optimalRoomData+"\n"))
+            roomEndTime = (optimalRoom[7].strftime("%I:%M%p")).lower()
+            if roomEndTime[0] == "0":
+                roomEndTime = roomEndTime[1:]
+            newBookings.append((optimalRoomData + " till " + roomEndTime))
             with open("OtherBookingChoices.txt", "a") as f:
                 f.writelines(otherBookingChoices)
             # while (room[0] == i)and not optimalRooms.empty():
@@ -128,14 +137,26 @@ def nextPage():
     return True
 
 def saveToFile(newBookings):
+    print("file changes now")
     with open("RoomBookings.txt", "r") as f:
         lines = f.readlines()
     
-    if len(lines) != 0:
-        lines.pop(0)
+    now = datetime.now()
+    pst_timezone = pytz.timezone('US/Pacific')
+    now = now.astimezone(pst_timezone)
+    now = now.strftime("%B %d, %Y")
+    nowDate = datetime.strptime(now, "%B %d, %Y")
+
+    newLines = []
+    for roomInfo in lines:
+        date_part = roomInfo.split("-")[0]
+        date_part = date_part[date_part.index(',')+2:len(date_part)-1]
+        roomDate = datetime.strptime(date_part, "%B %d, %Y")
+        if nowDate <= roomDate:
+            newLines.append(roomInfo)
 
     with open('RoomBookings.txt', 'w') as f:
-        f.writelines(lines)
+        f.writelines(newLines)
 
     with open("RoomBookings.txt", "a") as f:
         #newBookings = ["hi", "michael", "i like", "piiza"]
@@ -280,7 +301,7 @@ def findOptimalRoom(optimalRooms, rooms):
         capacityScore = RoomCapacities.RoomCapacities[roomNumber]
         capacityScore*=-1
 
-        optimalRooms.put((dateScore, timeScore , allotedTimeScore, roomScore, capacityScore, roomCount, room))
+        optimalRooms.put((dateScore, timeScore , allotedTimeScore, roomScore, capacityScore, roomCount, room, time))
         #print(optimalRooms.empty())
         roomCount+=1
         #print(roomDate)
@@ -316,7 +337,7 @@ def selectRoom(optimalRoom):
     print(driver.title)
     print("selecting room!")
     time.sleep(1)
-    roomSelection = driver.find_element(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[14]/td/div/div[2]/div[13]/a")
+    # roomSelection = driver.find_element(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[14]/td/div/div[2]/div[13]/a")
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[29]/td/div/div[2]/div[7]/a/div/div/div
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[33]/td/div/div[2]/div[5]/a
     print(optimalRoom.get_attribute('title'))
