@@ -31,6 +31,8 @@ jobs:
         run: python Github_Driver.py
       - name: Commit change to RoomBookings.txt log file
         run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git add .
           git commit -m "Updated RoomBookings.txt"
           git push
