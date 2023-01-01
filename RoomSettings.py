@@ -9,7 +9,7 @@ def intializeRoomSettings():
         pst_timezone = pytz.timezone('US/Pacific')
         now = now.astimezone(pst_timezone)
         next_day = now + timedelta(days=i)
-        currentDate = next_day.strftime("%B %d, %Y")
+        currentDate = next_day.strftime("%B %#d, %Y")
         days.append(currentDate)
     
     FAVORITE_TIMES_MW = ["10:00am", "10:30am"]
