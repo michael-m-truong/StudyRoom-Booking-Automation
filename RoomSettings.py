@@ -10,6 +10,7 @@ def intializeRoomSettings():
         now = now.astimezone(pst_timezone)
         next_day = now + timedelta(days=i)
         currentDate = next_day.strftime("%B %#d, %Y")
+        print(currentDate)
         days.append(currentDate)
     
     FAVORITE_TIMES_MW = ["10:00am", "10:30am"]
