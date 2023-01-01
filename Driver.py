@@ -59,6 +59,11 @@ def bookForWeek(optimalRooms):
         otherBookingChoices = []
         clickedNextPage = False
         dateMDY = FAVORITE_DATES[i] #(FAVORITE_DATES[i].split(',')[1] + FAVORITE_DATES[i].split(',')[1])[1:]
+        date_string = dateMDY
+        date_object = datetime.strptime(date_string, "%B %d, %Y")
+        print(date_object)
+        dateMDY = date_object.strftime("%B %#d, %Y")
+        print(dateMDY)
         dayOfWeek = datetime.strptime(dateMDY, "%B %d, %Y")
         dayOfWeek = dayOfWeek.strftime("%A")
         print(dateMDY)
@@ -144,14 +149,14 @@ def saveToFile(newBookings):
     now = datetime.now()
     pst_timezone = pytz.timezone('US/Pacific')
     now = now.astimezone(pst_timezone)
-    now = now.strftime("%B %d, %Y")
+    now = now.strftime("%B %#d, %Y")
     nowDate = datetime.strptime(now, "%B %d, %Y")
 
     newLines = []
     for roomInfo in lines:
         date_part = roomInfo.split("-")[0]
         date_part = date_part[date_part.index(',')+2:len(date_part)-1]
-        roomDate = datetime.strptime(date_part, "%B %d, %Y")
+        roomDate = datetime.strptime(date_part, "%B %#d, %Y")
         if nowDate <= roomDate:
             newLines.append(roomInfo)
 
@@ -207,7 +212,7 @@ def findOptimalRoom(optimalRooms, rooms):
     pst_timezone = pytz.timezone('US/Pacific')
     now = now.astimezone(pst_timezone)
     next_day = now + timedelta(days=1)
-    currentDate = next_day.strftime("%B %d, %Y")
+    currentDate = next_day.strftime("%B %#d, %Y")
     currentDayOfWeek = next_day.strftime("%A")
     #print(currentDayOfWeek)
     
