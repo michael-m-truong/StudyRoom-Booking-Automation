@@ -354,18 +354,24 @@ def selectRoom(optimalRoom):
 
 def login():
     time.sleep(1)
-    inputUsername = driver.find_element(by=By.XPATH, value="//*[@id='username']")
-    inputUsername.send_keys(os.environ.get("CPP_USERNAME"))
-    inputPassword = driver.find_element(by=By.XPATH, value="//*[@id='password']")
-    inputPassword.send_keys(os.environ.get("CPP_PASSWORD"))
-    loginButton = driver.find_element(by=By.XPATH, value="//*[@id='formcontainer']/form/button")
-    loginButton.click()
+    try:
+        inputUsername = driver.find_element(by=By.XPATH, value="//*[@id='username']")
+        inputUsername.send_keys(os.environ.get("CPP_USERNAME"))
+        inputPassword = driver.find_element(by=By.XPATH, value="//*[@id='password']")
+        inputPassword.send_keys(os.environ.get("CPP_PASSWORD"))
+        loginButton = driver.find_element(by=By.XPATH, value="//*[@id='formcontainer']/form/button")
+        loginButton.click()
+    except:
+        print("Already logged in")
 
 def duo2Factor():
     time.sleep(2)
-    driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
-    sendPushButton = driver.find_element(by=By.XPATH, value="//*[@id='auth_methods']/fieldset/div[1]/button")
-    sendPushButton.click()
+    try:
+        driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
+        sendPushButton = driver.find_element(by=By.XPATH, value="//*[@id='auth_methods']/fieldset/div[1]/button")
+        sendPushButton.click()
+    except:
+        print("Already logged in")
     #driver.switch_to.default_content() #
 
 def confirm():

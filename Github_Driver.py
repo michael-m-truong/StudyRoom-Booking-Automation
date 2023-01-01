@@ -63,7 +63,6 @@ def main():
 
 def bookForWeek(optimalRooms):
     newBookings = []
-    open("OtherBookingChoices.txt", "w").close()
     with open("RoomBookings.txt", "r") as f:
             lines = f.readlines()
     for i in range(0, len(FAVORITE_DATES)):
@@ -126,8 +125,8 @@ def bookForWeek(optimalRooms):
             if roomEndTime[0] == "0":
                 roomEndTime = roomEndTime[1:]
             newBookings.append((optimalRoomData + " till " + roomEndTime))
-            with open("OtherBookingChoices.txt", "a") as f:
-                f.writelines(otherBookingChoices)
+            # with open("OtherBookingChoices.txt", "a") as f:
+            #     f.writelines(otherBookingChoices)
             # while (room[0] == i)and not optimalRooms.empty():
             #     room = optimalRooms.get()
                 #print(room[6].get_attribute('title'))
@@ -366,18 +365,24 @@ def selectRoom(optimalRoom):
 
 def login():
     time.sleep(1)
-    inputUsername = driver.find_element(by=By.XPATH, value="//*[@id='username']")
-    inputUsername.send_keys(os.environ.get("CPP_USERNAME"))
-    inputPassword = driver.find_element(by=By.XPATH, value="//*[@id='password']")
-    inputPassword.send_keys(os.environ.get("CPP_PASSWORD"))
-    loginButton = driver.find_element(by=By.XPATH, value="//*[@id='formcontainer']/form/button")
-    loginButton.click()
+    try:
+        inputUsername = driver.find_element(by=By.XPATH, value="//*[@id='username']")
+        inputUsername.send_keys(os.environ.get("CPP_USERNAME"))
+        inputPassword = driver.find_element(by=By.XPATH, value="//*[@id='password']")
+        inputPassword.send_keys(os.environ.get("CPP_PASSWORD"))
+        loginButton = driver.find_element(by=By.XPATH, value="//*[@id='formcontainer']/form/button")
+        loginButton.click()
+    except:
+        print("Already logged in")
 
 def duo2Factor():
     time.sleep(2)
-    driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
-    sendPushButton = driver.find_element(by=By.XPATH, value="//*[@id='auth_methods']/fieldset/div[1]/button")
-    sendPushButton.click()
+    try:
+        driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
+        sendPushButton = driver.find_element(by=By.XPATH, value="//*[@id='auth_methods']/fieldset/div[1]/button")
+        sendPushButton.click()
+    except:
+        print("Already logged in")
     #driver.switch_to.default_content() #
 
 def confirm():
