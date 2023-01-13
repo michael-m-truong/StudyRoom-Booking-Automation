@@ -24,6 +24,8 @@ jobs:
         run: chromium-browser --version
       - name: Install a new Chromium
         run: sudo apt install -y chromium-browser
+      - name: check ver
+        run: chromium-browser --version
       - name: Install all necessary packages
         run: pip install selenium webdriver-manager pytz
       - name: Run the book study room script
