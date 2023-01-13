@@ -20,8 +20,6 @@ jobs:
         run: sudo apt purge google-chrome-stable
       - name: Remove default Chromium
         run: sudo apt purge chromium-browser
-      - name: check ver
-        run: chromium-browser --version
       - name: Install a new Chromium
         run: sudo apt install -y chromium-browser
       - name: check ver
