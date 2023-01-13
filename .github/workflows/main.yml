@@ -20,8 +20,10 @@ jobs:
         run: sudo apt purge google-chrome-stable
       - name: Remove default Chromium
         run: sudo apt purge chromium-browser
+      - name: update system
+        run: sudo apt update
       - name: Install a new Chromium
-        run: sudo apt install -y chromium-browser=108.0.5359.124
+        run: sudo apt install -y chromium-browser
       - name: Install all necessary packages
         run: pip install selenium webdriver-manager pytz
       - name: Run the book study room script
