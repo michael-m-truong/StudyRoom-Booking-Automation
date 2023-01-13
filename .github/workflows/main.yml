@@ -26,6 +26,8 @@ jobs:
         run: chromium-browser --version
       - name: Install all necessary packages
         run: pip install selenium webdriver-manager pytz
+      - name: check driver ver
+        run: chromedriver --version
       - name: Run the book study room script
         env: 
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
