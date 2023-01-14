@@ -24,7 +24,7 @@ from selenium.webdriver.chrome.options import Options
 import pytz
 
 load_dotenv()
-chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM, version="109.0.5414.74").install())
 
 chrome_options = Options()
 options = [
