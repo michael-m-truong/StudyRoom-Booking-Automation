@@ -28,6 +28,8 @@ jobs:
         run: pip install selenium webdriver-manager pytz
       - name: check driver ver
         run: chromedriver --version
+      - name: remove chromedriver
+        run: sudo apt purge chromedriver
       - name: Run the book study room script
         env: 
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
