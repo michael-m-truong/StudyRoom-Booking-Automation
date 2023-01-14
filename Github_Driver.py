@@ -24,7 +24,8 @@ from selenium.webdriver.chrome.options import Options
 import pytz
 
 load_dotenv()
-chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM, version="109.0.5414.74").install())
+os.environ["PATH"] += os.pathsep + '/usr/local/bin'
+#chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM, version="109.0.5414.74").install())
 
 chrome_options = Options()
 options = [
@@ -39,7 +40,7 @@ options = [
 for option in options:
     chrome_options.add_argument(option)
 
-driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+driver = webdriver.Chrome(options=chrome_options)
 
 optimalRooms = PriorityQueue()
 

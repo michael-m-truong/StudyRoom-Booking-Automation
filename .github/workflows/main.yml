@@ -28,8 +28,16 @@ jobs:
         run: pip install selenium webdriver-manager pytz
       - name: check driver ver
         run: chromedriver --version
+      - name: check driver location
+        run: ls /usr/local/bin/chromedriver*
       - name: remove chromedriver
         run: sudo apt purge chromedriver
+      - name: install chromedriver manually
+        run: |
+          wget https://chromedriver.storage.googleapis.com/109.0.5414.74/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin
+          sudo chmod +x /usr/local/bin/chromedriver
       - name: Run the book study room script
         env: 
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
