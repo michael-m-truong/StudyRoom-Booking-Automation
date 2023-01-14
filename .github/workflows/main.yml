@@ -36,7 +36,7 @@ jobs:
       #   run: sudo apt-get upgrade chromium
       # - name: check chromium ver
       #   run: chromium --version
-      # - name: install chromedriver manually
+      - name: install chromedriver manually
         run: |
           wget https://chromedriver.storage.googleapis.com/108.0.5359.22/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
