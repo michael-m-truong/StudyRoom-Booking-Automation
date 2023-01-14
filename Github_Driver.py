@@ -40,7 +40,7 @@ options = [
 for option in options:
     chrome_options.add_argument(option)
 
-driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+driver = webdriver.Chrome('/usr/bin/chromium-browser', service=chrome_service, options=chrome_options)
 
 optimalRooms = PriorityQueue()
 
