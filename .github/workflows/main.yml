@@ -28,20 +28,20 @@ jobs:
         run: pip install selenium webdriver-manager pytz
       - name: check driver location
         run: which chromium-browser
-      - name: unlink path
-        run: |
-          ls -al /usr/bin/chromium
-          sudo rm /usr/bin/chromium
+      # - name: unlink path
+      #   run: |
+      #     ls -al /usr/bin/chromium
+      #     sudo rm /usr/bin/chromium
       # - name: upgrade chromium
       #   run: sudo apt-get upgrade chromium
       # - name: check chromium ver
       #   run: chromium --version
       # - name: install chromedriver manually
-      #   run: |
-      #     wget https://chromedriver.storage.googleapis.com/108.0.5359.22/chromedriver_linux64.zip
-      #     unzip chromedriver_linux64.zip
-      #     sudo mv chromedriver /usr/local/bin
-      #     sudo chmod +x /usr/local/bin/chromedriver
+        run: |
+          wget https://chromedriver.storage.googleapis.com/108.0.5359.22/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin
+          sudo chmod +x /usr/local/bin/chromedriver
       - name: Run the book study room script
         env: 
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
