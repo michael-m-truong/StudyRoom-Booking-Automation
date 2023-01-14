@@ -26,8 +26,8 @@ jobs:
         run: chromium-browser --version
       - name: Install all necessary packages
         run: pip install selenium webdriver-manager pytz
-      # - name: check driver ver
-      #   run: chromedriver --version
+      - name: check driver location
+        run: which chromium-browser
       - name: upgrade chromium
         run: sudo apt-get upgrade chromium
       - name: check chromium ver
