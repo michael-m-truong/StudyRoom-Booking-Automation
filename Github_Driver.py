@@ -24,7 +24,7 @@ from selenium.webdriver.chrome.options import Options
 import pytz
 
 load_dotenv()
-#os.environ["PATH"] += os.pathsep + '/usr/local/bin'
+os.environ["PATH"] += os.pathsep + '/usr/local/bin/chromium-browser'
 chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
 
 chrome_options = Options()
