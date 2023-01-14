@@ -28,10 +28,10 @@ jobs:
         run: pip install selenium webdriver-manager pytz
       - name: check driver location
         run: which chromium-browser
-      - name: upgrade chromium
-        run: sudo apt-get upgrade chromium
-      - name: check chromium ver
-        run: chromium --version
+      # - name: upgrade chromium
+      #   run: sudo apt-get upgrade chromium
+      # - name: check chromium ver
+      #   run: chromium --version
       # - name: install chromedriver manually
       #   run: |
       #     wget https://chromedriver.storage.googleapis.com/108.0.5359.22/chromedriver_linux64.zip
