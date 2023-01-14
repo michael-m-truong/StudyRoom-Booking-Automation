@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromiumService
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
@@ -24,8 +24,8 @@ from selenium.webdriver.chrome.options import Options
 import pytz
 
 load_dotenv()
-os.environ["PATH"] += os.pathsep + '/usr/local/bin/chromium-browser'
-chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+#os.environ["PATH"] += os.pathsep + '/usr/local/bin/chromium-browser'
+chrome_service = ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
 
 chrome_options = Options()
 options = [
@@ -40,7 +40,7 @@ options = [
 for option in options:
     chrome_options.add_argument(option)
 
-driver = webdriver.Chrome('/usr/bin/chromium-browser', service=chrome_service, options=chrome_options)
+driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
 print(driver.capabilities['browserName'])
 print(driver.capabilities['browserVersion'])
 
