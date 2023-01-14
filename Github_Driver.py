@@ -42,6 +42,7 @@ for option in options:
 
 driver = webdriver.Chrome('/usr/bin/chromium-browser', service=chrome_service, options=chrome_options)
 print(driver.capabilities['browserName'])
+print(driver.capabilities['browserVersion'])
 
 optimalRooms = PriorityQueue()
 
