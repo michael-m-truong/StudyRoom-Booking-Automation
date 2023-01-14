@@ -28,6 +28,10 @@ jobs:
         run: pip install selenium webdriver-manager pytz
       - name: check driver location
         run: which chromium-browser
+      - name: unlink path
+        run: |
+          ls -al /usr/bin/chromium
+          sudo rm /usr/bin/chromium
       # - name: upgrade chromium
       #   run: sudo apt-get upgrade chromium
       # - name: check chromium ver
