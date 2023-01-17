@@ -40,6 +40,7 @@ jobs:
         run: |
           wget https://chromedriver.storage.googleapis.com/108.0.5359.22/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
+          rm chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin
           sudo chmod +x /usr/local/bin/chromedriver
       - name: Run the book study room script
