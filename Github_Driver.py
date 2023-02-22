@@ -102,10 +102,10 @@ def bookForWeek(optimalRooms):
             if len(availableRooms) == 0:
                 print("NO ROOMS!!!!!!!!!!!!")
                 continue
-            findOptimalRoom(optimalRooms, availableRooms)
+            optimalRoom = findOptimalRoom(optimalRooms, availableRooms)
             print("hereeeeeeeeeeeeeeeeeeeee")
             print(optimalRooms.empty())
-            optimalRoom = optimalRooms.get()
+            #optimalRoom = optimalRooms.get()
             optimalRoomData = optimalRoom[6].get_attribute('title')
             print(optimalRoomData)
             #print(optimalRoom.get_attribute('title'))
@@ -215,6 +215,7 @@ def getAvailableRooms(dayOfWeek):
 
 def findOptimalRoom(optimalRooms, rooms):
     print("hi")
+    optimalRoom = (100,100,100,100,100,100,100,100)
     rooms = set(rooms)
 
     now = datetime.now()
@@ -315,7 +316,8 @@ def findOptimalRoom(optimalRooms, rooms):
         capacityScore = RoomCapacities.RoomCapacities[roomNumber]
         capacityScore*=-1
 
-        optimalRooms.put((dateScore, timeScore , allotedTimeScore, roomScore, capacityScore, roomCount, room, time))
+        #optimalRooms.put((dateScore, timeScore , allotedTimeScore, roomScore, capacityScore, roomCount, room, time))
+        optimalRoom = min((dateScore, timeScore , allotedTimeScore, roomScore, capacityScore, roomCount, room, time), optimalRoom)
         #print(optimalRooms.empty())
         roomCount+=1
         #print(roomDate)
@@ -337,6 +339,8 @@ def findOptimalRoom(optimalRooms, rooms):
 
     # New time: 11:00am
     #print(time.strftime("%I:%M%p"))
+    
+    return optimalRoom
 
 
 def removeUnvailableRoom(room):
