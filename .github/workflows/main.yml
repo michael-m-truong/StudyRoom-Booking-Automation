@@ -22,7 +22,7 @@ jobs:
       - name: Remove Chrome
         run: sudo apt purge google-chrome-stable
       - name: Update default Chromium
-        run: sudo apt upgrade chromium-browser
+        run: sudo apt install --only-upgrade chromium-browser
 #         run: sudo apt purge chromium-browser
 #       - name: Install a new Chromium
 #         run: sudo apt install -y chromium-browser
