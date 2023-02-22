@@ -31,8 +31,8 @@ jobs:
           key: ${{ runner.os }}-chromium-browser-${{ hashFiles('**/lockfiles') }}
           restore-keys: |
             ${{ runner.os }}-chromium-browser-
-      - name: Install a new Chromium
-        run: sudo apt install -y chromium-browser
+#       - name: Install a new Chromium
+#         run: sudo apt install -y chromium-browser
       - name: check ver
         run: chromium-browser --version
       - name: Install all necessary packages
