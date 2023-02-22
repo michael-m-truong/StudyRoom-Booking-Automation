@@ -21,11 +21,11 @@ jobs:
         run: apt list --installed
       - name: Remove Chrome
         run: sudo apt purge google-chrome-stable
-      - name: Update default Chromium
-        run: sudo apt install --only-upgrade chromium-browser
-#         run: sudo apt purge chromium-browser
-#       - name: Install a new Chromium
-#         run: sudo apt install -y chromium-browser
+      - name: Remove default Chromium
+#        run: sudo apt install --only-upgrade chromium-browser
+        run: sudo apt purge chromium-browser
+      - name: Install a new Chromium
+        run: sudo apt install -y chromium-browser
       - name: check ver
         run: chromium-browser --version
       - name: Install all necessary packages
