@@ -184,16 +184,16 @@ def getDatesInTable():
     current_window_handle = driver.current_window_handle
     print("current: "+ current_window_handle)
     
-#     try:
-#         alert = driver.switch_to.alert
-#         alert_text = alert.text
-#         print("alert text: " + alert.text)
-#         alert.dismiss()
-#         driver.switch_to.default_content() # switch back to the browser
-#     except NoAlertPresentException:
-#         print("no alert")
-#     except Exception as e:
-#         print("got an error:" + str(e))
+    try:
+        alert = driver.switch_to.alert
+        alert_text = alert.text
+        print("alert text: " + alert.text)
+        alert.accept()
+        driver.switch_to.default_content() # switch back to the browser
+    except NoAlertPresentException:
+        print("no alert")
+    except Exception as e:
+        print("got an error:" + str(e))
         
     # driver.switch_to.window(current_window_handle)
     #print("current: "+ current_window_handle)
