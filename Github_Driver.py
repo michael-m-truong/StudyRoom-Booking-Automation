@@ -208,8 +208,9 @@ def getDatesInTable():
         print(tableDates[1].text)
         print(tableDates[2].text)
         return [tableDates[0].text, tableDates[1].text, tableDates[2].text]
-    except:
+    except Exception as e:
         print("The element doesn't appear in 20 seconds")
+        print(e)
         return None
 
 
