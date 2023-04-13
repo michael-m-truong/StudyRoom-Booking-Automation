@@ -190,6 +190,9 @@ def getDatesInTable():
         print("got an error:" + str(e))
     
     try:
+        # Wait for the table to load
+        wait = WebDriverWait(driver, 10)
+        table = wait.until(EC.presence_of_element_located((By.XPATH, "//*[@id='eq-time-grid']/div[2]/div/table")))
         time.sleep(4)
         tableDates = driver.find_elements(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/thead/tr/td[3]/div/div/div/table/tbody/tr[1]/th/div/span")
         print("length is: " + str(len(tableDates)))
