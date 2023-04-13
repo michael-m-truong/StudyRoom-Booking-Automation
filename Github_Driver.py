@@ -180,6 +180,9 @@ def saveToFile(newBookings):
         f.writelines(newBookings)
 
 def getDatesInTable():
+    # Get the current window handle
+    current_window_handle = driver.current_window_handle
+    
     try:
         alert = driver.switch_to.alert
         alert.dismiss()
@@ -188,6 +191,8 @@ def getDatesInTable():
         print("no alert")
     except Exception as e:
         print("got an error:" + str(e))
+        
+    driver.switch_to.window(current_window_handle)
     
     try:
         # Wait for the table to load
