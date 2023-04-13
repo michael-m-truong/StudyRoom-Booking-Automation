@@ -186,7 +186,7 @@ def getDatesInTable():
     try:
         alert = driver.switch_to.alert
         alert_text = alert.text
-        print("alert text: "alert_text)
+        print("alert text: " + alert_text)
         alert.dismiss()
         driver.switch_to.default_content() # switch back to the browser
     except NoAlertPresentException:
