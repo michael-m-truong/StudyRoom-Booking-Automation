@@ -188,13 +188,17 @@ def getDatesInTable():
         print("no alert")
     except Exception as e:
         print("got an error:" + str(e))
-
-    time.sleep(2)
-    tableDates = driver.find_elements(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/thead/tr/td[3]/div/div/div/table/tbody/tr[1]/th/div/span")
-    print(tableDates[0].text)
-    print(tableDates[1].text)
-    print(tableDates[2].text)
-    return [tableDates[0].text, tableDates[1].text, tableDates[2].text]
+    
+    try:
+        time.sleep(2)
+        tableDates = driver.find_elements(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/thead/tr/td[3]/div/div/div/table/tbody/tr[1]/th/div/span")
+        print(tableDates[0].text)
+        print(tableDates[1].text)
+        print(tableDates[2].text)
+        return [tableDates[0].text, tableDates[1].text, tableDates[2].text]
+    except Exception as e:
+        print("oh noooo")
+        print(str(e))
 
 
 def getAvailableRooms(dayOfWeek):
