@@ -49,7 +49,7 @@ jobs:
       #   run: chromium --version
       - name: install chromedriver manually
         run: |
-          wget https://chromedriver.storage.googleapis.com/110.0.5481.77/chromedriver_linux64.zip
+          wget https://chromedriver.storage.googleapis.com/112.0.5615.49/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
           rm chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin
