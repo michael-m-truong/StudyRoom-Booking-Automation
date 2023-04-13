@@ -185,7 +185,9 @@ def getDatesInTable():
         alert.dismiss()
         driver.switch_to.default_content() # switch back to the browser
     except NoAlertPresentException:
-        pass
+        print("no alert")
+    except Exception as e:
+        print("got an error:" + str(e))
 
     time.sleep(2)
     tableDates = driver.find_elements(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/thead/tr/td[3]/div/div/div/table/tbody/tr[1]/th/div/span")
