@@ -192,7 +192,7 @@ def getDatesInTable():
     try:
         time.sleep(4)
         tableDates = driver.find_elements(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/thead/tr/td[3]/div/div/div/table/tbody/tr[1]/th/div/span")
-        print("length is: " + str(len(tableDates))
+        print("length is: " + str(len(tableDates)))
         print(tableDates[0].text)
         print(tableDates[1].text)
         print(tableDates[2].text)
