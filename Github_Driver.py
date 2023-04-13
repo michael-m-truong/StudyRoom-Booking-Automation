@@ -179,16 +179,19 @@ def saveToFile(newBookings):
         f.writelines(newBookings)
 
 def getDatesInTable():
+    try:
+        alert = driver.switch_to.alert
+        alert.dismiss()
+    except NoAlertPresentException:
+        pass
+
     time.sleep(2)
     tableDates = driver.find_elements(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/thead/tr/td[3]/div/div/div/table/tbody/tr[1]/th/div/span")
     print(tableDates[0].text)
     print(tableDates[1].text)
     print(tableDates[2].text)
     return [tableDates[0].text, tableDates[1].text, tableDates[2].text]
-    print(FAVORITE_DATES[2])
-    print(FAVORITE_DATES[3])
-    #print(len(tableDates))
-    #print(tableDates[0].text)
+
 
 def getAvailableRooms(dayOfWeek):
     #table = driver.find_element(by=By.XPATH, value="")
