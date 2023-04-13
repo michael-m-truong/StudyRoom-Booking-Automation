@@ -196,9 +196,9 @@ def getDatesInTable():
 #         print("got an error:" + str(e))
         
     # driver.switch_to.window(current_window_handle)
-    print("current: "+ current_window_handle)
-    driver.switch_to.default_content()
-    print("current: "+ current_window_handle)
+    #print("current: "+ current_window_handle)
+    #driver.switch_to.default_content()
+    #print("current: "+ current_window_handle)
     
     # Wait for the table to load
     try:
