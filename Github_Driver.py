@@ -289,7 +289,7 @@ def findOptimalRoom(optimalRooms, rooms):
                 roomEndTime = roomEndTime[1:]
             roomData = ''.join([roomEndTime, " ", roomDateAndNumber])
             #print("this is room data:" + roomData + "L")
-            print(roomData)
+            # print(roomData)  # used to print room for debugging
             #print(availableRooms)
             if roomData in availableRooms:
                 intervalsOf30Min+=1
