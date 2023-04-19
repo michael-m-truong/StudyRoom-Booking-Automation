@@ -392,7 +392,7 @@ def selectRoom(optimalRoom):
     driver.execute_script("arguments[0].scrollIntoView();", submitTime)
 
     submitTime.click()
-    time.sleep(1)
+    time.sleep(3)
 
 def login():
     time.sleep(1)
