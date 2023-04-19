@@ -425,7 +425,7 @@ def confirm():
         continueButton.click()
 
         confirmButton = WebDriverWait(driver, 60).until(
-            EC.presence_of_element_located((By.XPATH, "//*[@id='s-lc-eq-bform-submit']"))
+            EC.presence_of_element_located((By.XPATH, "//*[@id="btn-form-submit"]"))
         )
         confirmButton.click()
         print("clicked")
