@@ -18,8 +18,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoAlertPresentException
 
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.utils import ChromeType
+#from webdriver_manager.chrome import ChromeDriverManager
+#from webdriver_manager.core.utils import ChromeType
 from selenium.webdriver.chrome.options import Options
 
 import pytz
