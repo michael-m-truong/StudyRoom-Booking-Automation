@@ -114,6 +114,10 @@ test = f'//*[@id="eq-time-grid"]/div[2]/div/table/tbody/tr/td[3]/div/div/div/tab
 bestRoom = wait.until(EC.element_to_be_clickable((By.XPATH, test)))
 driver.execute_script("arguments[0].scrollIntoView();", bestRoom)
 bestRoom.click()
+
+submitTime = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='submit_times']")))
+driver.execute_script("arguments[0].scrollIntoView();", submitTime)
+submitTime.click()
 # submitTime = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='submit_times']")))
 # driver.execute_script("arguments[0].scrollIntoView();", submitTime)
 # submitTime.click()
