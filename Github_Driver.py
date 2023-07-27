@@ -278,7 +278,7 @@ def saveToFile(newBookings):
     print(num_previous_lines)
     print(num_current_lines)
 
-    return num_previous_lines - num_current_lines <= 1  #if true, means you are at most updated bookings 1 week advance
+    return num_previous_lines - num_current_lines <= 3  #if true, means you are at most updated bookings 1 week advance
 
 def getDatesInTable():
     # Get the current window handle
