@@ -24,7 +24,9 @@ from selenium.webdriver.chrome.options import Options
 
 import pytz
 
-load_dotenv()
+from Util import get_pst_time, get_seconds_to_next_pst_midnight
+
+#load_dotenv()
 os.environ["PATH"] += os.pathsep + '/usr/local/bin'
 #chrome_service = ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
 
@@ -47,6 +49,8 @@ print(driver.capabilities['browserVersion'])
 
 optimalRooms = PriorityQueue()
 
+wait = WebDriverWait(driver, 10)
+
 def main():
     driver.maximize_window()
     #driver.get('https://cpp.libcal.com/reserve/study-rooms')
@@ -54,7 +58,22 @@ def main():
     # Add some elements to the queue
     #print(optimalRooms.empty())
     #table()
-    bookForWeek(optimalRooms)
+    upToDate = saveToFile([])
+    if upToDate:
+        goToLogin()
+        login()
+        duo2Factor()
+        driver.get('https://cpp.libcal.com/reserve/study-rooms')
+        ROOM_4134, room_title = getRoomFirst()
+        selectRoom(ROOM_4134)
+        roomEndTime = confirm()
+        
+        newBooking = []
+        newBooking.append((room_title + " till " + roomEndTime))
+        saveToFile(newBooking)
+
+    else:
+        bookForWeek(optimalRooms)
     #findOptimalRoom(getAvailableRooms())
     # print(optimalRooms.get()[6].get_attribute('title'))
     #optimalRoom = optimalRooms.get()[6]
@@ -64,6 +83,78 @@ def main():
     #duo2Factor()
     #confirm()
     #driver.close()
+
+def goToLogin():
+    driver.get('https://my.cpp.edu')
+
+def getRoomFirst():
+    wait = WebDriverWait(driver, 10)
+    button_xpath = '//*[@id="eq-time-grid"]/div[1]/div[1]/button[1]'
+    button = wait.until(EC.element_to_be_clickable((By.XPATH, button_xpath)))
+
+    # Click the button
+    button.click()
+
+
+    # Wait for the table to be present
+    wait = WebDriverWait(driver, 10)
+    #table_xpath = '//*[@id="equip_"]/div[5]/div[1]/table/tbody'
+    #table = wait.until(EC.presence_of_element_located((By.XPATH, table_xpath)))
+
+    # Unfocus the clicked button using JavaScript
+    tooltip = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "tooltip")))
+    driver.execute_script("arguments[0].remove();", tooltip)
+
+
+    # Get the current date in UTC
+    utc_now = datetime.utcnow()
+
+    # Convert to Greenwich Mean Time (GMT)
+    gmt_tz = pytz.timezone('GMT')
+    gmt_now = utc_now.astimezone(gmt_tz)
+
+    # Calculate the date one week in advance in GMT
+    gmt_one_week_in_advance = gmt_now + timedelta(days=7)
+
+    # Set the time to 00:00:00 for both dates
+    gmt_today_date = gmt_now.replace(hour=0, minute=0, second=0, microsecond=0)
+    gmt_one_week_in_advance_date = gmt_one_week_in_advance.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    # Convert dates to Unix timestamps in milliseconds
+    today_unix_ms = int(gmt_today_date.timestamp()) * 1000
+    one_week_in_advance_unix_ms = int(gmt_one_week_in_advance_date.timestamp()) * 1000
+
+    print(today_unix_ms)
+    print(one_week_in_advance_unix_ms)
+
+    # Find the "today" day element in the table
+    # today_element_xpath = f'//td[@data-date="{today_unix_ms}"]'
+    # today_element = wait.until(EC.element_to_be_clickable((By.XPATH, today_element_xpath)))
+
+    # Find the "1 week in advance" day element in the table
+    one_week_in_advance_element_xpath = f'//td[@data-date="{one_week_in_advance_unix_ms}"]'
+    one_week_in_advance_element = wait.until(EC.element_to_be_clickable((By.XPATH, one_week_in_advance_element_xpath)))
+
+    #wait till midnight
+    seconds_to_wait = get_seconds_to_next_pst_midnight()
+    print(f"Waiting {seconds_to_wait} seconds until midnight PST.")
+    time.sleep(seconds_to_wait)
+
+    # Click on the "today" day element
+    #today_element.click()
+
+    # Click on the "1 week in advance" day element
+    one_week_in_advance_element.click()
+
+
+    bestroom = f'//*[@id="eq-time-grid"]/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[29]/td/div/div[2]/div[6]/a'
+    bestRoom_element = wait.until(EC.element_to_be_clickable((By.XPATH, bestroom)))
+    # bestRoom = wait.until(EC.element_to_be_clickable((By.XPATH, test)))
+    # driver.execute_script("arguments[0].scrollIntoView();", bestRoom)
+    # bestRoom.click()
+    return (bestRoom_element, bestRoom_element.get_attribute('title'))
+    
+
 
 def bookForWeek(optimalRooms):
     newBookings = []
@@ -155,6 +246,7 @@ def saveToFile(newBookings):
     print("file changes now")
     with open("RoomBookings.txt", "r") as f:
         lines = f.readlines()
+    num_previous_lines = len(lines)
     
     now = datetime.now()
     pst_timezone = pytz.timezone('US/Pacific')
@@ -178,6 +270,15 @@ def saveToFile(newBookings):
         for i in range(len(newBookings)):
             newBookings[i] = newBookings[i] + "\n"
         f.writelines(newBookings)
+    
+    with open("RoomBookings.txt", "r") as f:
+        current_lines = f.readlines()
+    num_current_lines = len(current_lines)
+
+    print(num_previous_lines)
+    print(num_current_lines)
+
+    return num_previous_lines - num_current_lines <= 1  #if true, means you are at most updated bookings 1 week advance
 
 def getDatesInTable():
     # Get the current window handle
@@ -378,21 +479,20 @@ def removeUnvailableRoom(room):
 def selectRoom(optimalRoom):
     print(driver.title)
     print("selecting room!")
-    time.sleep(1)
+    #time.sleep(1)
     # roomSelection = driver.find_element(by=By.XPATH, value="//*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[14]/td/div/div[2]/div[13]/a")
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[29]/td/div/div[2]/div[7]/a/div/div/div
     # //*[@id='eq-time-grid']/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[33]/td/div/div[2]/div[5]/a
-    print(optimalRoom.get_attribute('title'))
-    print("----------------------------------------------")
+    #print(optimalRoom.get_attribute('title'))
+    #print("----------------------------------------------")
     driver.execute_script("arguments[0].scrollIntoView();", optimalRoom)
     optimalRoom.click()
-    time.sleep(1)
+    #time.sleep(1)
     # driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-    submitTime = driver.find_element(by=By.XPATH, value="//*[@id='submit_times']")
+    submitTime = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='submit_times']")))
     driver.execute_script("arguments[0].scrollIntoView();", submitTime)
 
     submitTime.click()
-    time.sleep(3)
 
 def login():
     time.sleep(1)
@@ -431,8 +531,11 @@ def confirm():
         print("clicked")
     except:
         print("what")
+        endTime_element = wait.until(EC.element_to_be_clickable((By.XPATH, f'//*[@id="s-lc-public-page-content"]/div/div[1]/dl/dd[5]')))
+        endTime = (endTime_element.text).split()[2]
         driver.quit()
     print("done")
+    return endTime
 
 if __name__ == "__main__":
     main()
