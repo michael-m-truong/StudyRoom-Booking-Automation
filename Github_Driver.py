@@ -493,6 +493,7 @@ def selectRoom(optimalRoom):
     driver.execute_script("arguments[0].scrollIntoView();", submitTime)
 
     submitTime.click()
+    print(driver.title)
     print("room selected!")
 
 def login():
@@ -524,8 +525,9 @@ def duo2Factor():
 
 def confirm():
     print("here")
+    print(driver.title)
     endTime = None
-    print(driver.page_source)
+    #print(driver.page_source)
     try:
         continueButton = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='terms_accept']"))
@@ -544,6 +546,7 @@ def confirm():
         print("clicked")
     except Exception as e:
         print("what")
+        print(driver.title)
         print(e)
         driver.quit()
     print("done")
