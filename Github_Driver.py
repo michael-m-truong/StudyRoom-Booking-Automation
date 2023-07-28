@@ -525,6 +525,7 @@ def duo2Factor():
 def confirm():
     print("here")
     endTime = None
+    print(driver.page_source)
     try:
         continueButton = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='terms_accept']"))
@@ -546,6 +547,7 @@ def confirm():
         print(e)
         driver.quit()
     print("done")
+    print("endtime: " +str(endTime))
     return endTime
 
 if __name__ == "__main__":
