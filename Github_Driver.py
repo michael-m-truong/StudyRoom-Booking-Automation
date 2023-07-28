@@ -114,7 +114,7 @@ def getRoomFirst():
     gmt_now = utc_now.astimezone(gmt_tz)
 
     # Calculate the date one week in advance in GMT
-    gmt_one_week_in_advance = gmt_now + timedelta(days=6)  #testing
+    gmt_one_week_in_advance = gmt_now + timedelta(days=5)  #testing
 
     # Set the time to 00:00:00 for both dates
     gmt_today_date = gmt_now.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -519,6 +519,8 @@ def duo2Factor():
 
         sendPushButton = driver.find_element(by=By.XPATH, value="//*[@id='auth_methods']/fieldset/div[1]/button")
         sendPushButton.click()
+
+        time.sleep(5)
     except:
         print("Already logged in")
     #driver.switch_to.default_content() #

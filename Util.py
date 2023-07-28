@@ -20,7 +20,7 @@ def get_seconds_to_next_pst_midnight():
     pst_now = get_pst_time()
     
     # Calculate the time until the next midnight (12 AM) in PST
-    next_midnight = pst_now.replace(hour=1, minute=2, second=0, microsecond=0) + timedelta(days=0)
+    next_midnight = pst_now.replace(hour=1, minute=7, second=0, microsecond=0) + timedelta(days=0)
     time_difference = next_midnight - pst_now
     
     # Convert the time difference to seconds
