@@ -376,6 +376,8 @@ def duo2Factor():
 
 def confirm():
     print("here")
+    while (driver.title != 'Booking Details - Library Events - California State Polytechnic University, Pomona'):
+        pass
     try:
         continueButton = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='terms_accept']"))
