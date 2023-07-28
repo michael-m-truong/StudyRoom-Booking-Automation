@@ -114,7 +114,7 @@ def getRoomFirst():
     gmt_now = utc_now.astimezone(gmt_tz)
 
     # Calculate the date one week in advance in GMT
-    gmt_one_week_in_advance = gmt_now + timedelta(days=6)  #testing
+    gmt_one_week_in_advance = gmt_now + timedelta(days=5)  #testing
 
     # Set the time to 00:00:00 for both dates
     gmt_today_date = gmt_now.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -493,7 +493,7 @@ def selectRoom(optimalRoom):
     driver.execute_script("arguments[0].scrollIntoView();", submitTime)
 
     submitTime.click()
-    time.sleep(.5)
+    time.sleep(2)
     print(driver.title)
     print("room selected!")
 
