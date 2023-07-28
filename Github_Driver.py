@@ -114,11 +114,11 @@ def getRoomFirst():
     gmt_now = utc_now.astimezone(gmt_tz)
 
     # Calculate the date one week in advance in GMT
-    gmt_one_week_in_advance = gmt_now + timedelta(days=0)  #testing
+    gmt_one_week_in_advance = gmt_now + timedelta(days=5)  #testing
 
     # Set the time to 00:00:00 for both dates
     gmt_today_date = gmt_now.replace(hour=0, minute=0, second=0, microsecond=0)
-    gmt_one_week_in_advance_date = gmt_one_week_in_advance.replace(hour=0, minute=20, second=0, microsecond=0)
+    gmt_one_week_in_advance_date = gmt_one_week_in_advance.replace(hour=0, minute=21, second=0, microsecond=0)
 
     # Convert dates to Unix timestamps in milliseconds
     today_unix_ms = int(gmt_today_date.timestamp()) * 1000
