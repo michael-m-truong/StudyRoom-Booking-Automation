@@ -509,11 +509,12 @@ def login():
 def duo2Factor():
     time.sleep(2)
     try:
+        driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
+
         rememberMeButton_xpath = f'//*[@id="login-form"]/div[2]/div/label/input'
         rememberMeButton = driver.find_element(by=By.XPATH, value=rememberMeButton_xpath)
         rememberMeButton.click()
 
-        driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
         sendPushButton = driver.find_element(by=By.XPATH, value="//*[@id='auth_methods']/fieldset/div[1]/button")
         sendPushButton.click()
     except:
