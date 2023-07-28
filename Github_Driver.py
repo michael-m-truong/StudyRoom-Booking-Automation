@@ -114,11 +114,11 @@ def getRoomFirst():
     gmt_now = utc_now.astimezone(gmt_tz)
 
     # Calculate the date one week in advance in GMT
-    gmt_one_week_in_advance = gmt_now + timedelta(days=7)
+    gmt_one_week_in_advance = gmt_now + timedelta(days=0)  #testing
 
     # Set the time to 00:00:00 for both dates
     gmt_today_date = gmt_now.replace(hour=0, minute=0, second=0, microsecond=0)
-    gmt_one_week_in_advance_date = gmt_one_week_in_advance.replace(hour=0, minute=0, second=0, microsecond=0)
+    gmt_one_week_in_advance_date = gmt_one_week_in_advance.replace(hour=0, minute=20, second=0, microsecond=0)
 
     # Convert dates to Unix timestamps in milliseconds
     today_unix_ms = int(gmt_today_date.timestamp()) * 1000
@@ -493,6 +493,7 @@ def selectRoom(optimalRoom):
     driver.execute_script("arguments[0].scrollIntoView();", submitTime)
 
     submitTime.click()
+    print("room selected!")
 
 def login():
     time.sleep(1)
@@ -523,21 +524,26 @@ def duo2Factor():
 
 def confirm():
     print("here")
+    endTime = None
     try:
         continueButton = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='terms_accept']"))
         )
         continueButton.click()
+        print("pressed continue")
 
         confirmButton = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='btn-form-submit']"))
         )
         confirmButton.click()
-        print("clicked")
-    except:
-        print("what")
+        print("pressed confirm")
+
         endTime_element = wait.until(EC.element_to_be_clickable((By.XPATH, f'//*[@id="s-lc-public-page-content"]/div/div[1]/dl/dd[5]')))
         endTime = (endTime_element.text).split()[2]
+        print("clicked")
+    except Exception as e:
+        print("what")
+        print(e)
         driver.quit()
     print("done")
     return endTime
