@@ -493,6 +493,7 @@ def selectRoom(optimalRoom):
     driver.execute_script("arguments[0].scrollIntoView();", submitTime)
 
     submitTime.click()
+    # time.sleep(4)
     print(driver.title)
     print("room selected!")
 
@@ -530,6 +531,8 @@ def confirm():
     print(driver.title)
     endTime = None
     #print(driver.page_source)
+    while (driver.title != 'Booking Details - Library Events - California State Polytechnic University, Pomona'):
+        pass
     try:
         continueButton = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='terms_accept']"))
