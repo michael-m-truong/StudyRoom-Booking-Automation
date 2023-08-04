@@ -50,7 +50,7 @@ jobs:
         run: |
           wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/115.0.5790.170/linux64/chromedriver-linux64.zip
           unzip chromedriver-linux64.zip
-          rm chromedriver_linux64.zip
+          rm chromedriver-linux64.zip
           sudo mv chromedriver /usr/local/bin
           sudo chmod +x /usr/local/bin/chromedriver
       - name: Run the book study room script
