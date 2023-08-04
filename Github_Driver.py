@@ -65,7 +65,7 @@ def main():
         duo2Factor()
         driver.get('https://cpp.libcal.com/reserve/study-rooms')
         ROOM_4134, room_title = getRoomFirst()
-        # login()
+        login()
         selectRoom(ROOM_4134)
         login()
         roomEndTime = confirm()
@@ -512,7 +512,7 @@ def login():
         print("Already logged in")
 
 def duo2Factor():
-    time.sleep(2)
+    time.sleep(1)
     try:
         driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
 
@@ -525,7 +525,7 @@ def duo2Factor():
 
         time.sleep(5)
     except:
-        print("Already logged in")
+        print("Already duo factored")
     #driver.switch_to.default_content() #
 
 def confirm():
