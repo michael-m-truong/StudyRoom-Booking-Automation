@@ -65,9 +65,9 @@ def main():
         duo2Factor()
         driver.get('https://cpp.libcal.com/reserve/study-rooms')
         ROOM_4134, room_title = getRoomFirst()
-        login()
+        login() # some rzn i need this
         selectRoom(ROOM_4134)
-        login()
+        login() #not if need this but if do  may need duo fac too?
         roomEndTime = confirm()
         
         newBooking = []
