@@ -494,7 +494,7 @@ def selectRoom(optimalRoom):
     driver.execute_script("arguments[0].scrollIntoView();", submitTime)
 
     submitTime.click()
-    time.sleep(5)
+    #time.sleep(5)
     print(driver.title)
     print("room selected!")
 
