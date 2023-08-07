@@ -1,5 +1,6 @@
 import time
 import os 
+import threading
 
 import RoomCapacities
 from RoomSettings import intializeRoomSettings, FAVORITE_TIMES_MW, FAVORITE_TIMES_TTH, FAVORITE_DATES, FAVORITE_ROOMS
@@ -17,6 +18,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoAlertPresentException
+from selenium.webdriver.common.action_chains import ActionChains
+
 
 #from webdriver_manager.chrome import ChromeDriverManager
 #from webdriver_manager.core.utils import ChromeType
@@ -68,6 +71,7 @@ def main():
         login() # some rzn i need this
         selectRoom(ROOM_4134)
         login() #not if need this but if do  may need duo fac too?
+        duo2Factor()
         roomEndTime = confirm()
         
         newBooking = []
@@ -137,6 +141,11 @@ def getRoomFirst():
     one_week_in_advance_element_xpath = f'//td[@data-date="{one_week_in_advance_unix_ms}"]'
     one_week_in_advance_element = wait.until(EC.element_to_be_clickable((By.XPATH, one_week_in_advance_element_xpath)))
 
+    # Create a thread to simulate activity
+    activity_stop_event = threading.Event()
+    activity_thread = threading.Thread(target=simulate_activity_thread, args=(driver, activity_stop_event))
+    activity_thread.start()
+
     #wait till midnight
     seconds_to_wait = get_seconds_to_next_pst_midnight()
     print(f"Waiting {seconds_to_wait} seconds until midnight PST.")
@@ -144,6 +153,8 @@ def getRoomFirst():
 
     # Click on the "today" day element
     #today_element.click()
+    activity_stop_event.set()
+    activity_thread.join()
 
     # Click on the "1 week in advance" day element
     one_week_in_advance_element.click()
@@ -156,7 +167,21 @@ def getRoomFirst():
     # bestRoom.click()
     return (bestRoom_element, bestRoom_element.get_attribute('title'))
     
+def simulate_activity(driver, seconds):
+    # Perform simulated mouse movements to keep the session alive
+    body = driver.find_element_by_tag_name('body')
+    
+    # Simulate moving the mouse cursor to different positions
+    actions = ActionChains(driver)
+    actions.move_to_element(body).perform()
+    actions.move_by_offset(10, 10).perform()  # Move cursor slightly
+    actions.move_by_offset(-10, -10).perform()  # Move cursor back
 
+# Simulate activity in a separate thread
+def simulate_activity_thread(driver, stop_event):
+    while not stop_event.is_set():
+        simulate_activity(driver)
+        time.sleep(60)  # Simulate activity every 1 minute
 
 def bookForWeek(optimalRooms):
     newBookings = []
@@ -519,11 +544,11 @@ def duo2Factor():
         rememberMeButton_xpath = f'//*[@id="login-form"]/div[2]/div/label/input'
         rememberMeButton = driver.find_element(by=By.XPATH, value=rememberMeButton_xpath)
         rememberMeButton.click()
-
+        time.sleep(1)
         sendPushButton = driver.find_element(by=By.XPATH, value="//*[@id='auth_methods']/fieldset/div[1]/button")
         sendPushButton.click()
 
-        time.sleep(5)
+        time.sleep(8)
     except:
         print("Already duo factored")
     #driver.switch_to.default_content() #
