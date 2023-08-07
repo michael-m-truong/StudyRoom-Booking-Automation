@@ -169,7 +169,7 @@ def getRoomFirst():
     
 def simulate_activity(driver):
     # Perform simulated mouse movements to keep the session alive
-    body = driver.find_element_by_tag_name('body')
+    body = driver.find_element(by=By.TAG_NAME, value='body')
     
     # Simulate moving the mouse cursor to different positions
     actions = ActionChains(driver)
