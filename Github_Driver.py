@@ -120,7 +120,7 @@ def getRoomFirst():
     gmt_now = utc_now.astimezone(gmt_tz)
 
     # Calculate the date one week in advance in GMT
-    gmt_one_week_in_advance = gmt_now + timedelta(days=4)  #when testing make days < 7
+    gmt_one_week_in_advance = gmt_now + timedelta(days=7)  #when testing make days < 7
 
     # Set the time to 00:00:00 for both dates
     gmt_today_date = gmt_now.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -167,7 +167,7 @@ def getRoomFirst():
     # bestRoom.click()
     return (bestRoom_element, bestRoom_element.get_attribute('title'))
     
-def simulate_activity(driver, seconds):
+def simulate_activity(driver):
     # Perform simulated mouse movements to keep the session alive
     body = driver.find_element_by_tag_name('body')
     
