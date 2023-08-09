@@ -142,9 +142,9 @@ def getRoomFirst():
     one_week_in_advance_element = wait.until(EC.element_to_be_clickable((By.XPATH, one_week_in_advance_element_xpath)))
 
     # Create a thread to simulate activity
-    activity_stop_event = threading.Event()
-    activity_thread = threading.Thread(target=simulate_activity_thread, args=(driver, activity_stop_event))
-    activity_thread.start()
+    #activity_stop_event = threading.Event()
+    #activity_thread = threading.Thread(target=simulate_activity_thread, args=(driver, activity_stop_event))
+    #activity_thread.start()
 
     #wait till midnight
     seconds_to_wait = get_seconds_to_next_pst_midnight()
@@ -153,8 +153,8 @@ def getRoomFirst():
 
     # Click on the "today" day element
     #today_element.click()
-    activity_stop_event.set()
-    activity_thread.join()
+    #activity_stop_event.set()
+    #activity_thread.join()
 
     # Click on the "1 week in advance" day element
     one_week_in_advance_element.click()
