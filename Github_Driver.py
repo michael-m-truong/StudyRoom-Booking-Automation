@@ -147,7 +147,7 @@ def getRoomFirst():
     #activity_thread.start()
 
     #wait till midnight
-    seconds_to_wait = get_seconds_to_next_pst_midnight() - 20  #open 20 sec before midnight?
+    seconds_to_wait = get_seconds_to_next_pst_midnight() - 60  #open 60 sec before midnight?
     print(f"Waiting {seconds_to_wait} seconds until midnight PST.")
     time.sleep(seconds_to_wait)
 
