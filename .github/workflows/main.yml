@@ -46,9 +46,9 @@ jobs:
       #   run: chromium --version
       - name: install chromedriver manually
         run: |
-          wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/117.0.5938.62/linux64/chrome-linux64.zip
-          unzip chrome-linux64.zip
-          rm chrome-linux64.zip
+          wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/117.0.5938.62/linux64/chromedriver-linux64.zip
+          unzip chromedriver-linux64.zip
+          rm chromedriver-linux64.zip
           sudo mv chromedriver-linux64/chromedriver /usr/local/bin
           sudo chmod +x /usr/local/bin/chromedriver
       - name: Run the book study room script
