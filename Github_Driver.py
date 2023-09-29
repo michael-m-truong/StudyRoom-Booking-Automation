@@ -564,13 +564,13 @@ def confirm():
     #time.sleep(10)
     print(driver.title)
     try:
-        continueButton = WebDriverWait(driver, 60).until(
+        continueButton = WebDriverWait(driver, 120).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='terms_accept']"))
         )
         continueButton.click()
         print("pressed continue")
 
-        confirmButton = WebDriverWait(driver, 60).until(
+        confirmButton = WebDriverWait(driver, 120).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='btn-form-submit']"))
         )
         confirmButton.click()
