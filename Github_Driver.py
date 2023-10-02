@@ -552,7 +552,7 @@ def duo2Factor():
         time.sleep(8)
     except:
         print("Already duo factored")
-    #driver.switch_to.default_content() #
+    driver.switch_to.default_content() #
 
 def confirm():
     print("here")
